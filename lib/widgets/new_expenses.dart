@@ -77,115 +77,127 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 48, 15, 15),
-      child: Column(
-        
-        children: [
-          TextField(
-            controller: _titleController,
-            maxLength: 50,
-            decoration: const InputDecoration(
-              label: Text("davay kiritchi nimadir"),
+    final keyboard = MediaQuery.of(context).viewInsets.bottom;
+    return LayoutBuilder(builder: (ctx, contraints) {
+      final width = contraints.maxWidth;
+      return SizedBox(
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(15, 48, 15, keyboard + 16),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _titleController,
+                  maxLength: 50,
+                  decoration: const InputDecoration(
+                    label: Text("davay kiritchi nimadir"),
+                  ),
+                ),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _amountController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                            prefixText: "\$",
+                            label: Text("davay narxni kiritchi ")),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Expanded(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          _SelectedDate == null
+                              ? "sanani tanla ukajon"
+                              : dateFormatter.format(_SelectedDate!),
+                        ),
+                        IconButton(
+                            onPressed: _presentDataPicker,
+                            icon: const Icon(Icons.calendar_month))
+                      ],
+                    )),
+                  ],
+                ),
+                const SizedBox(
+                  height: 22,
+                ),
+                //
+                Row(
+                  children: [
+                    DropdownButton(
+                        value: _selectedCategory,
+                        items: Categorycha.values
+                            .map((val) => DropdownMenuItem(
+                                  value: val,
+                                  child: Text(val.name.toString()),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == null) {
+                              return;
+                            }
+                            _selectedCategory = value;
+                          });
+                        }),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        "Bekor qilish",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                      ),
+                      onPressed: _submitExpansedate,
+                      child: const Text(
+                        "Saqlash",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
             ),
           ),
-
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                      prefixText: "\$", label: Text("davay narxni kiritchi ")),
-                ),
-              ),
-              const SizedBox(
-                width: 12,
-              ),
-              Expanded(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    _SelectedDate == null
-                        ? "sanani tanla ukajon"
-                        : dateFormatter.format(_SelectedDate!),
-                  ),
-                  IconButton(
-                      onPressed: _presentDataPicker,
-                      icon: const Icon(Icons.calendar_month))
-                ],
-              )),
-            ],
-          ),
-          const SizedBox(
-            height: 22,
-          ),
-          //
-          Row(
-            children: [
-              DropdownButton(
-                  value: _selectedCategory,
-                  items: Categorycha.values
-                      .map((val) => DropdownMenuItem(
-                            value: val,
-                            child: Text(val.name.toString()),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      if (value == null) {
-                        return;
-                      }
-                      _selectedCategory = value;
-                    });
-                  }),
-              const Spacer(),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                ),
-                child: const Text(
-                  "Bekor qilish",
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                ),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                ),
-                onPressed: _submitExpansedate,
-                child: const Text(
-                  "Saqlash",
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 }

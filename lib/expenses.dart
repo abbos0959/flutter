@@ -27,6 +27,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverly() {
     showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => NewExpense(onaddexpense: _addexpenses),
@@ -62,6 +63,9 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     Widget maincontent = const Center(
       child: Text("sizda hali ma'lumot  mavjud emas"),
     );
@@ -71,32 +75,41 @@ class _ExpensesState extends State<Expenses> {
           ExprensesList(expenses: _registerExprense, onremove: _removeExpenses);
     }
     return Scaffold(
-        appBar: AppBar(
-            title: const Text(
-              "Buni kuchli dasturchi yozgan.",
-              style: TextStyle(color: Colors.orange),
-            ),
-            actions: [
-              Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.green,
-                    border: Border.all(
-                      color: Colors.white, // Border rangi
-                      width: 2.0, // Border qalinligi
-                    )),
-                child: IconButton(
-                  onPressed: _openAddExpenseOverly,
-                  icon: const Icon(Icons.add),
-                  color: Colors.white,
-                ),
+      appBar: AppBar(
+          centerTitle: false,
+          title: const Text(
+            "Buni kuchli dasturchi yozgan.",
+            style: TextStyle(color: Colors.orange),
+          ),
+          actions: [
+            Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.green,
+                  border: Border.all(
+                    color: Colors.white, // Border rangi
+                    width: 2.0, // Border qalinligi
+                  )),
+              child: IconButton(
+                onPressed: _openAddExpenseOverly,
+                icon: const Icon(Icons.add),
+                color: Colors.white,
               ),
-            ]),
-        body: Column(
-          children: [
-            Chart(expenses: _registerExprense),
-            Expanded(child: maincontent)
-          ],
-        ));
+            ),
+          ]),
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: _registerExprense),
+                Expanded(child: maincontent)
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(child: Chart(expenses: _registerExprense)),
+                Expanded(child: maincontent)
+              ],
+            ),
+    );
   }
 }

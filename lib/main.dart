@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:todo/expenses.dart';
+import 'package:flutter/services.dart';
 
 var kcolor = ColorScheme.fromSeed(
-  seedColor: Color.fromARGB(255, 59, 207, 14),
+  seedColor: const Color.fromARGB(255, 59, 207, 14),
 );
 var darkColor = ColorScheme.fromSeed(
     brightness: Brightness.dark,
     seedColor: const Color.fromARGB(255, 9, 99, 125));
 void main() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]).then((fn) {});
   runApp(
     MaterialApp(
       darkTheme: ThemeData.dark().copyWith(
           useMaterial3: true,
           colorScheme: darkColor,
-          
           cardTheme: const CardTheme().copyWith(
             color: darkColor.secondaryContainer,
-            
           )),
       debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(
